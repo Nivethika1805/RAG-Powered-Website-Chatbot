@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+faiss_index/
+*.log
+.vscode/
+.idea/
+.streamlit/
+data/
+!data/.keep
