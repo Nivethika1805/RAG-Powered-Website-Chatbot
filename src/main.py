@@ -5,7 +5,9 @@ import uvicorn
 import os
 import sys
 
-# Add parent directory to path for imports if needed
+# Add src directory to path explicitly to fix imports on Render
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Add parent directory to path for config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.chatbot.rag_chatbot import RAGChatbot

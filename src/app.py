@@ -101,20 +101,27 @@ st.markdown("""
         transform: translateY(-1px);
     }
 
-    /* Standard Input Fields */
+    /* Standard Input Fields - Transparent & Dark Text */
     .stTextInput > div > div > input,
     .stTextArea > div > div > textarea {
-        background-color: var(--surface-color) !important;
-        border: 1px solid var(--border-color) !important;
+        background-color: transparent !important;
+        border: 1px solid var(--primary-accent) !important;
         border-radius: 8px !important;
-        color: var(--text-main) !important;
+        color: #000000 !important;
+        font-weight: 500;
         padding: 0.75rem !important;
     }
     
     .stTextInput > div > div > input:focus,
     .stTextArea > div > div > textarea:focus {
         border-color: var(--primary-accent) !important;
-        box-shadow: 0 0 0 2px rgba(171, 136, 109, 0.2) !important;
+        box-shadow: 0 0 0 2px rgba(65, 68, 75, 0.2) !important;
+    }
+
+    /* Input Labels - Dark Color */
+    .stTextArea label, .stTextInput label {
+        color: #000000 !important;
+        font-weight: 600 !important;
     }
 
     /* Clear Chat Experience */
@@ -238,8 +245,7 @@ def main():
                 st.markdown('</div>', unsafe_allow_html=True)
 
     
-    # Main content area based on navigation selection
-    st.markdown('<div class="human-card">', unsafe_allow_html=True)
+    # Main content area based on navigation selection - Container removed as requested
     
     if st.session_state.selected_tab == 0:
         phase1_interface()
@@ -247,8 +253,6 @@ def main():
         phase2_interface()
     elif st.session_state.selected_tab == 2:
         phase3_interface()
-    
-    st.markdown('</div>', unsafe_allow_html=True)
 
     
 def phase1_interface():
@@ -485,7 +489,7 @@ def phase3_interface():
     status = chatbot.get_status()
     
     # Simplified Layout: Direct Download & Embed
-    st.markdown('<div class="info-box" style="padding: 2.5rem; text-align: center; border-radius: 20px;">', unsafe_allow_html=True)
+    st.markdown('<div style="padding: 1rem 0; text-align: center;">', unsafe_allow_html=True)
     
     st.markdown("### 📦 Your Ready-to-Deploy RAG Agent")
     st.markdown("Download the complete intelligent system or copy the embed code to use it in your application instantly.")
