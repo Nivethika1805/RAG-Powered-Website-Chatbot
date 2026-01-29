@@ -44,7 +44,7 @@ class TextSummarizer:
                 f"Synthesized Answer:"
             )
             
-            result = pipeline(prompt, max_length=300, min_length=50, do_sample=True, temperature=0.6)
+            result = pipeline(prompt, max_length=150, min_length=30, do_sample=False, temperature=0.3)
 
             return result[0]['generated_text'].strip()
 
@@ -69,7 +69,7 @@ class TextSummarizer:
             if len(summary) > max_length * 2:
                 summary = summary[:max_length * 2] + "..."
             
-            return summary.strip()
+            return summary.strip() if summary else "No summary available."
             
         except Exception as e:
             print(f"Error in simple summarization: {e}")

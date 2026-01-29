@@ -33,7 +33,7 @@ class AutomaticIngestor:
             )
         return self.web_scraper, self.text_processor, self.text_splitter, self.summarizer, self.vector_store
         
-    def ingest_website(self, url: str, max_pages: int = 3) -> Tuple[str, bool]:
+    def ingest_website(self, url: str, max_pages: int = 1) -> Tuple[str, bool]:
         """
         Ingest website content automatically.
         
@@ -154,7 +154,7 @@ class AutomaticIngestor:
             traceback.print_exc()
             return []
     
-    def ingest_url(self, url: str, max_pages: int = 3) -> str:
+    def ingest_url(self, url: str, max_pages: int = 1) -> str:
         """
         Ingest website content automatically (alias for ingest_website).
         
