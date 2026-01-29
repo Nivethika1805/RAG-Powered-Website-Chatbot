@@ -171,31 +171,29 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Initialize session state - lazy loading to avoid initialization errors
-if 'chatbot' not in st.session_state:
-    st.session_state.chatbot = None
-if 'manual_ingestor' not in st.session_state:
-    st.session_state.manual_ingestor = None
-if 'auto_ingestor' not in st.session_state:
-    st.session_state.auto_ingestor = None
+# Initialize session state for UI tracking
 if 'selected_tab' not in st.session_state:
     st.session_state.selected_tab = 0
 
-# Lazy initialization functions
-def get_chatbot():
-    if st.session_state.chatbot is None:
-        st.session_state.chatbot = RAGChatbot()
-    return st.session_state.chatbot
+# Lazy initialization functions with caching for stability
+@st.cache_resource
+def init_system():
+    """Initializes the entire system once and caches it across sessions"""
+    print("INIT: Setting up RAG System components...")
+    chatbot = RAGChatbot()
+    # Pre-warm the embedding model (lightweight)
+    chatbot.manual_ingestor._get_components()
+    return chatbot
 
+def get_chatbot():
+    return init_system()
+
+# Legacy helpers for backward compatibility in the code
 def get_manual_ingestor():
-    if st.session_state.manual_ingestor is None:
-        st.session_state.manual_ingestor = ManualIngestor()
-    return st.session_state.manual_ingestor
+    return init_system().manual_ingestor
 
 def get_auto_ingestor():
-    if st.session_state.auto_ingestor is None:
-        st.session_state.auto_ingestor = AutomaticIngestor()
-    return st.session_state.auto_ingestor
+    return init_system().auto_ingestor
 
 def simulate_typing(text, speed=0.01):
     """Simulate a human-like typing effect"""
@@ -243,6 +241,16 @@ def main():
                     st.session_state.selected_tab = tab_index
                     st.rerun()
                 st.markdown('</div>', unsafe_allow_html=True)
+            
+            # System Status Indicator
+            st.markdown("---")
+            try:
+                # This will trigger initialization if not already done
+                get_chatbot()
+                st.markdown('<div style="color: #059669; font-size: 0.8rem; font-weight: 600;">● System Online</div>', unsafe_allow_html=True)
+            except Exception as e:
+                st.markdown(f'<div style="color: #dc2626; font-size: 0.8rem; font-weight: 600;">● System Initializing...</div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="font-size: 0.7rem; color: #64748b;">Waiting for resources: {str(e)[:50]}</div>', unsafe_allow_html=True)
 
     
     # Main content area based on navigation selection - Container removed as requested
